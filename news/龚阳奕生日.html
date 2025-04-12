@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>祝学姐生日快乐</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .birthday-card {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            text-align: center;
+            max-width: 500px;
+        }
+        .birthday-card h1 {
+            color: #ff6b6b;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        .birthday-card p {
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        .birthday-card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background-color: #0066cc;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #0066cc;
+            color: white;
+            margin-top: 30px;
+        }
+        .balloon {
+            width: 40px;
+            height: 50px;
+            background-color: #ff6b6b;
+            border-radius: 50%;
+            position: absolute;
+            animation: float 5s infinite ease-in-out;
+        }
+        .balloon::after {
+            content: '';
+            position: absolute;
+            width: 2px;
+            height: 30px;
+            background-color: #ff6b6b;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 页面头部 -->
+    <header>
+        <div class="container">
+            <h1>祝学姐生日快乐</h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="content">
+            <section class="birthday-card">
+                <h2>亲爱的学姐</h2>
+                <p>
+                    今天是你的生日，我们全体同学向你送上最真挚的祝福！
+                </p>
+                <p>
+                    愿你在新的一岁里，学业有成，梦想成真，每天都充满快乐和阳光！
+                </p>
+                <img src="birthday-cake.jpg" alt="生日蛋糕">
+                <p>
+                    愿你的生活如这蛋糕般甜蜜，如这蜡烛般光明！
+                </p>
+                <p>
+                    生日快乐！
+                </p>
+            </section>
+        </div>
+    </div>
+
+    <!-- 页面底部 -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 117-119实验室 版权所有</p>
+        </div>
+    </footer>
+
+    <script>
+        // 创建气球动画效果
+        function createBalloons() {
+            const colors = ['#ff6b6b', '#4ecdc4', '#ffbe0b', '#a29bfe'];
+            for (let i = 0; i < 10; i++) {
+                const balloon = document.createElement('div');
+                balloon.className = 'balloon';
+                balloon.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                balloon.style.left = `${Math.random() * 90 + 5}%`;
+                balloon.style.top = `${Math.random() * 80 + 10}%`;
+                balloon.style.animationDelay = `${Math.random() * 5}s`;
+                document.body.appendChild(balloon);
+            }
+        }
+        createBalloons();
+    </script>
+</body>
+</html>
