@@ -125,28 +125,36 @@ h2 {
     border-radius: 8px;
 }
 
-/* 相关课题组 */
-.team-members {
+/* 学生列表 */
+.student-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 20px;
     margin-bottom: 30px;
 }
 
-.member-card {
+.student-card {
     background-color: #f9f9f9;
     padding: 15px;
     border-radius: 8px;
     text-align: center;
+    overflow: hidden;
 }
 
-.member-card img {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
+.student-card img {
+    width: 100%;
+    height: 200px;
     object-fit: cover;
+    border-radius: 8px;
     margin-bottom: 10px;
 }
+
+.student-name {
+    font-size: 1.2em;
+    color: #0066cc;
+    font-weight: bold;
+}
+
 
 /* 联系我们 */
 .contact {
