@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF 文件展示</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .pdf-container {
+            margin: 20px 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .pdf-item {
+            margin: 10px 0;
+            padding: 15px;
+            background-color: white;
+            border-radius: 5px;
+            border-left: 4px solid #0066cc;
+        }
+        .pdf-item h3 {
+            margin: 0 0 10px 0;
+            color: #0066cc;
+        }
+        .pdf-item a {
+            color: #333;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .pdf-item a:hover {
+            color: #0066cc;
+        }
+        .pdf-item p {
+            margin: 5px 0;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <!-- 页面头部 -->
+    <header>
+        <div class="container">
+            <h1>PDF 文件展示</h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="content">
+            <section>
+                <h2>PDF 文件列表</h2>
+                <p>
+                    以下是文件夹中的 PDF 文件，点击链接即可查看或下载。
+                </p>
+                
+                <!-- PDF 文件列表容器 -->
+                <div class="pdf-container" id="pdfContainer">
+                    <!-- PDF 文件项目将通过 JavaScript 动态添加到这里 -->
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- 页面底部 -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 117-119实验室 版权所有</p>
+        </div>
+    </footer>
+
+    <script>
+        // 模拟文件夹中的 PDF 文件数据
+        // 在实际应用中，你可能需要通过后端接口获取文件列表
+        const pdfFiles = [
+            {
+                name: "Spider-Web Building: Measurement of web geometry identifies components in a complex invertebrate behavior pattern",
+                url: "Referience/Spider-Web-Building.pdf",
+                description: "这是第一个示例 PDF 文档的描述信息。",
+                size: "1.4 MB"
+            }
+        ];
+
+        // 动态生成 PDF 文件列表
+        function renderPDFFiles() {
+            const container = document.getElementById('pdfContainer');
+            
+            pdfFiles.forEach(file => {
+                const pdfItem = document.createElement('div');
+                pdfItem.className = 'pdf-item';
+                
+                pdfItem.innerHTML = `
+                    <h3><a href="${file.url}" target="_blank">${file.name}</a></h3>
+                    <p>${file.description}</p>
+                    <p><strong>文件大小:</strong> ${file.size}</p>
+                `;
+                
+                container.appendChild(pdfItem);
+            });
+        }
+
+        // 页面加载完成后渲染 PDF 文件列表
+        document.addEventListener('DOMContentLoaded', renderPDFFiles);
+    </script>
+</body>
+</html>
