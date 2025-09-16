@@ -14,7 +14,9 @@ jobs:
 
       - name: 生成 files.json
         run: |
-          cd projects/Morden_Physics_Experiment_II/Referience
+          cd projects
+          cd Morden_Physics_Experiment_II
+          cd Reference
           echo '[' > files.json
           first=true
           for f in *.pdf; do
