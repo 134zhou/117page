@@ -78,8 +78,8 @@
         .catch(err => document.getElementById(boxId).innerHTML = `<p class="empty" style="color:red">${err.message}</p>`);
 
     /* ---------- 加载两份列表 ---------- */
-    render('./Reference/files.json', 'pdfList');   // 参考资料
-    render('./reports.json', 'reportList', './Reports/'); // 实验报告
+    render('./Reference/files.json', 'pdfList', 'Reference/');   // 参考资料
+    render('./Reports/reports.json', 'reportList', 'Reports/'); // 实验报告
   </script>
 </body>
 </html>
