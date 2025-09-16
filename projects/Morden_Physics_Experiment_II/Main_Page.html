@@ -2,37 +2,28 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>近代物理实验 II – 资料下载</title>
-  <link rel="stylesheet" href="../../styles.css"> <!-- 沿用你的全局样式 -->
+  <title>近代物理实验 II – 资料与报告</title>
+  <link rel="stylesheet" href="../../styles.css">
   <style>
-    /* 局部微调 */
-    #pdfList {
+    /* ===== 局部微调 ===== */
+    .block { margin: 40px 0; }
+    .file-list {
       display: grid;
       gap: 15px;
       margin-top: 20px;
     }
-    .pdf-item {
+    .file-card {
       background: #fff;
       padding: 15px 20px;
       border-left: 4px solid #0066cc;
       border-radius: 4px;
       box-shadow: 0 2px 6px rgba(0,0,0,.08);
     }
-    .pdf-item h3 {
-      margin: 0 0 8px;
-      font-size: 1.15em;
-    }
-    .pdf-item a {
-      color: #0066cc;
-      text-decoration: none;
-    }
-    .pdf-item a:hover {
-      text-decoration: underline;
-    }
-    .size {
-      color: #666;
-      font-size: .9em;
-    }
+    .file-card h3 { margin: 0 0 8px; font-size: 1.15em; }
+    .file-card a { color: #0066cc; text-decoration: none; }
+    .file-card a:hover { text-decoration: underline; }
+    .size { color: #666; font-size: .9em; }
+    .empty { color: #999; }
   </style>
 </head>
 
@@ -40,17 +31,27 @@
   <header>
     <div class="container">
       <h1>近代物理实验 II</h1>
-      <p class="subtitle">相关资料</p>
+      <p class="subtitle">参考资料 & 实验报告</p>
     </div>
   </header>
 
   <div class="container">
     <div class="content">
-      <section>
-        <h2>PDF 文件列表</h2>
+
+      <!-- ===== 参考资料 ===== -->
+      <section class="block">
+        <h2>📎 参考资料</h2>
         <p>点击文件名即可在线浏览或下载。</p>
-        <div id="pdfList">加载中…</div>
+        <div id="pdfList" class="file-list">加载中…</div>
       </section>
+
+      <!-- ===== 实验报告 ===== -->
+      <section class="block">
+        <h2>📝 实验报告</h2>
+        <p>小组实验报告（PDF）。</p>
+        <div id="reportList" class="file-list">加载中…</div>
+      </section>
+
     </div>
   </div>
 
@@ -61,24 +62,24 @@
   </footer>
 
   <script>
-    // 读取同层 Reference 目录下的 files.json
-    fetch('./Reference/files.json')
-      .then(r => {
-        if(!r.ok) throw new Error('列表获取失败');
-        return r.json();
-      })
-      .then(list => {
-        const box = document.getElementById('pdfList');
-        if(!list.length){ box.innerHTML = '<p>暂无文件</p>'; return;}
-        box.innerHTML = list.map(f => `
-          <div class="pdf-item">
-            <h3><a href="./Reference/${f.url}" target="_blank">${f.name}</a></h3>
-            <span class="size">${(f.size/1024).toFixed(1)} KB</span>
-          </div>`).join('');
-      })
-      .catch(err => {
-        document.getElementById('pdfList').innerHTML = `<p style="color:red">${err.message}</p>`;
-      });
+    /* ---------- 通用渲染函数 ---------- */
+    const render = (url, boxId, urlPrefix = '') =>
+      fetch(url)
+        .then(r => r.json())
+        .then(list => {
+          const box = document.getElementById(boxId);
+          if (!list.length) { box.innerHTML = '<p class="empty">暂无文件</p>'; return; }
+          box.innerHTML = list.map(f => `
+            <div class="file-card">
+              <h3><a href="${urlPrefix}${f.url}" target="_blank">${f.name}</a></h3>
+              <span class="size">${(f.size/1024).toFixed(1)} KB</span>
+            </div>`).join('');
+        })
+        .catch(err => document.getElementById(boxId).innerHTML = `<p class="empty" style="color:red">${err.message}</p>`);
+
+    /* ---------- 加载两份列表 ---------- */
+    render('./Reference/files.json', 'pdfList');   // 参考资料
+    render('./reports.json', 'reportList', './Reports/'); // 实验报告
   </script>
 </body>
 </html>

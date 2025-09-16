@@ -1,22 +1,28 @@
-name: 生成文件列表
+name: 自动生成文件列表
 
 on:
   push:
     paths:
-      - 'projects/Morden_Physics_Experiment_II/Referience/**'
-  workflow_dispatch:
+      - 'projects/Modern_Physics_Experiment_II/Reference/**'
+      - 'projects/Modern_Physics_Experiment_II/Reports/**'
+  workflow_dispatch:   # 手动触发按钮
+
+permissions:
+  contents: write     # 直接给写权限，省去仓库设置
 
 jobs:
-  list:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: 拉取代码
+        uses: actions/checkout@v4
 
-      - name: 生成 files.json
+      # ---------- 1. 生成 Reference/files.json ----------
+      - name: 生成参考资料列表
         run: |
-          cd projects
-          cd Morden_Physics_Experiment_II
-          cd Reference
+          set -e
+          REF_DIR="projects/Modern_Physics_Experiment_II/Reference"
+          cd "$REF_DIR"
           echo '[' > files.json
           first=true
           for f in *.pdf; do
@@ -28,10 +34,31 @@ jobs:
           done
           echo ']' >> files.json
 
+      # ---------- 2. 生成 Reports/reports.json ----------
+      - name: 生成实验报告列表
+        run: |
+          set -e
+          REP_DIR="projects/Modern_Physics_Experiment_II/Reports"
+          # 若目录不存在则创建
+          mkdir -p "$REP_DIR"
+          cd "$REP_DIR"
+          echo '[' > reports.json
+          first=true
+          for f in *.pdf; do
+            [ -e "$f" ] || continue
+            name=$(basename "$f")
+            size=$(stat -c%s "$f")
+            $first && first=false || echo -n ',' >> reports.json
+            echo -n "{\"name\":\"$name\",\"url\":\"$f\",\"size\":$size}" >> reports.json
+          done
+          echo ']' >> reports.json
+
+      # ---------- 3. 提交并推送 ----------
       - name: 提交变更
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add projects/Morden_Physics_Experiment_II/Reference/files.json
-          git diff --cached --quiet || git commit -m "auto: update file list"
+          git add projects/Modern_Physics_Experiment_II/Reference/files.json \
+                    projects/Modern_Physics_Experiment_II/Reports/reports.json
+          git diff --cached --quiet || git commit -m "auto: update file lists"
           git push
