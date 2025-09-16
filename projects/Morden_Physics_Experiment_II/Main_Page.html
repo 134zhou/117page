@@ -1,106 +1,84 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDF 文件展示</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        .pdf-container {
-            margin: 20px 0;
-            padding: 20px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .pdf-item {
-            margin: 10px 0;
-            padding: 15px;
-            background-color: white;
-            border-radius: 5px;
-            border-left: 4px solid #0066cc;
-        }
-        .pdf-item h3 {
-            margin: 0 0 10px 0;
-            color: #0066cc;
-        }
-        .pdf-item a {
-            color: #333;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        .pdf-item a:hover {
-            color: #0066cc;
-        }
-        .pdf-item p {
-            margin: 5px 0;
-            color: #666;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>近代物理实验 II – 资料下载</title>
+  <link rel="stylesheet" href="../../styles.css"> <!-- 沿用你的全局样式 -->
+  <style>
+    /* 局部微调 */
+    #pdfList {
+      display: grid;
+      gap: 15px;
+      margin-top: 20px;
+    }
+    .pdf-item {
+      background: #fff;
+      padding: 15px 20px;
+      border-left: 4px solid #0066cc;
+      border-radius: 4px;
+      box-shadow: 0 2px 6px rgba(0,0,0,.08);
+    }
+    .pdf-item h3 {
+      margin: 0 0 8px;
+      font-size: 1.15em;
+    }
+    .pdf-item a {
+      color: #0066cc;
+      text-decoration: none;
+    }
+    .pdf-item a:hover {
+      text-decoration: underline;
+    }
+    .size {
+      color: #666;
+      font-size: .9em;
+    }
+  </style>
 </head>
+
 <body>
-    <!-- 页面头部 -->
-    <header>
-        <div class="container">
-            <h1>PDF 文件展示</h1>
-        </div>
-    </header>
-
+  <header>
     <div class="container">
-        <div class="content">
-            <section>
-                <h2>PDF 文件列表</h2>
-                <p>
-                    以下是文件夹中的 PDF 文件，点击链接即可查看或下载。
-                </p>
-                
-                <!-- PDF 文件列表容器 -->
-                <div class="pdf-container" id="pdfContainer">
-                    <!-- PDF 文件项目将通过 JavaScript 动态添加到这里 -->
-                </div>
-            </section>
-        </div>
+      <h1>近代物理实验 II</h1>
+      <p class="subtitle">参考资料下载</p>
     </div>
+  </header>
 
-    <!-- 页面底部 -->
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 117-119实验室 版权所有</p>
-        </div>
-    </footer>
+  <div class="container">
+    <div class="content">
+      <section>
+        <h2>PDF 文件列表</h2>
+        <p>点击文件名即可在线浏览或下载。</p>
+        <div id="pdfList">加载中…</div>
+      </section>
+    </div>
+  </div>
 
-    <script>
-        // 模拟文件夹中的 PDF 文件数据
-        // 在实际应用中，你可能需要通过后端接口获取文件列表
-        const pdfFiles = [
-            {
-                name: "Spider-Web Building: Measurement of web geometry identifies components in a complex invertebrate behavior pattern",
-                url: "Referience/Spider-Web-Building.pdf",
-                description: "这是第一个示例 PDF 文档的描述信息。",
-                size: "1.4 MB"
-            }
-        ];
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 117-119 实验室 版权所有</p>
+    </div>
+  </footer>
 
-        // 动态生成 PDF 文件列表
-        function renderPDFFiles() {
-            const container = document.getElementById('pdfContainer');
-            
-            pdfFiles.forEach(file => {
-                const pdfItem = document.createElement('div');
-                pdfItem.className = 'pdf-item';
-                
-                pdfItem.innerHTML = `
-                    <h3><a href="${file.url}" target="_blank">${file.name}</a></h3>
-                    <p>${file.description}</p>
-                    <p><strong>文件大小:</strong> ${file.size}</p>
-                `;
-                
-                container.appendChild(pdfItem);
-            });
-        }
-
-        // 页面加载完成后渲染 PDF 文件列表
-        document.addEventListener('DOMContentLoaded', renderPDFFiles);
-    </script>
+  <script>
+    // 读取同层 Reference 目录下的 files.json
+    fetch('./Reference/files.json')
+      .then(r => {
+        if(!r.ok) throw new Error('列表获取失败');
+        return r.json();
+      })
+      .then(list => {
+        const box = document.getElementById('pdfList');
+        if(!list.length){ box.innerHTML = '<p>暂无文件</p>'; return;}
+        box.innerHTML = list.map(f => `
+          <div class="pdf-item">
+            <h3><a href="./Reference/${f.url}" target="_blank">${f.name}</a></h3>
+            <span class="size">${(f.size/1024).toFixed(1)} KB</span>
+          </div>`).join('');
+      })
+      .catch(err => {
+        document.getElementById('pdfList').innerHTML = `<p style="color:red">${err.message}</p>`;
+      });
+  </script>
 </body>
 </html>
